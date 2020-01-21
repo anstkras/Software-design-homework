@@ -1,1 +1,1 @@
-# Software-design-homework
+A repository for homeworks for software design course.
