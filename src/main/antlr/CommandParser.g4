@@ -6,8 +6,8 @@ line
     ;
 
 command
-    : echo_command
-    | cat_command
+    : echoCommand
+    | catCommand
     | wcCommand
     | pwdCommand
     | exitCommand
@@ -18,11 +18,11 @@ assignment
     : variable'='value
     ;
 
-echo_command
+echoCommand
     : 'echo' STRING
     ;
 
-cat_command
+catCommand
     : 'cat' STRING
     ;
 
