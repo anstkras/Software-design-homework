@@ -42,12 +42,17 @@ class Parser : CommandParserBaseVisitor<CommandBuilder>() {
 
         pipeline.addCommandLast(commandBuilder)
 
-        ctx.line().forEachIndexed { index, it ->
-            val commandBuilder = it.command().accept(this)
-            if (index == ctx.line().lastIndex) {
+        var line = ctx.line(0)
+        while (true) {
+            val commandBuilder = line.command().accept(this)
+            if (line.line().isEmpty()) {
                 commandBuilder.outputStreamWriter(OutputStreamWriter(System.out))
+                pipeline.addCommandLast(commandBuilder)
+                break
+            } else {
+                pipeline.addCommandLast(commandBuilder)
             }
-            pipeline.addCommandLast(commandBuilder)
+            line = line.line(0)
         }
 
         return CommandBuilder().commandStrategy(pipeline)

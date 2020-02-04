@@ -17,7 +17,7 @@ class Pipeline : Command {
         if (!commands.first.isSetInputStreamReader()) {
             commands.first.inputStreamReader(InputStreamReader(System.`in`))
         }
-        var byteArrayOutputStream: ByteArrayOutputStream = ByteArrayOutputStream()
+        var byteArrayOutputStream = ByteArrayOutputStream()
         commands.forEachIndexed { index, it ->
             if (!it.isSetInputStreamReader()) {
                 it.inputStreamReader(InputStreamReader(ByteArrayInputStream(byteArrayOutputStream.toByteArray())))
