@@ -8,6 +8,8 @@ command
     : echo_command
     | cat_command
     | wcCommand
+    | pwdCommand
+    | exitCommand
     ;
 
 echo_command
@@ -20,6 +22,14 @@ cat_command
 
 wcCommand
     : 'wc' STRING?
+    ;
+
+pwdCommand
+    : 'pwd'
+    ;
+
+exitCommand
+    : 'exit'
     ;
 
 STRING

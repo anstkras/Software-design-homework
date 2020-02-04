@@ -12,10 +12,11 @@ fun main(args: Array<String>) {
     try {
         while (true) {
             readLine()?.let { if (it.isNotEmpty()) runCommand(it) }
-            break
         }
     } catch (e: IllegalStateException) {
         println(e.message)
+    }  catch (e: ExitException) {
+
     }
 }
 
@@ -50,6 +51,10 @@ class Parser : CommandParserBaseVisitor<CommandBuilder>() {
         return CommandBuilder().commandStrategy(pipeline)
     }
 
+    override fun visitPwdCommand(ctx: CommandParserParser.PwdCommandContext?): CommandBuilder {
+        return CommandBuilder().commandStrategy(PwdCommand())
+    }
+
     override fun visitEcho_command(ctx: CommandParserParser.Echo_commandContext): CommandBuilder {
         return CommandBuilder().commandStrategy(EchoCommand())
             .inputStreamReader(InputStreamReader(ctx.STRING().toString().byteInputStream()))
@@ -66,5 +71,9 @@ class Parser : CommandParserBaseVisitor<CommandBuilder>() {
         }
         return CommandBuilder().commandStrategy(WcCommand())
             .inputStreamReader(InputStreamReader(FileInputStream(ctx.STRING().toString())))
+    }
+
+    override fun visitExitCommand(ctx: CommandParserParser.ExitCommandContext?): CommandBuilder {
+        return CommandBuilder().commandStrategy(ExitCommand())
     }
 }
