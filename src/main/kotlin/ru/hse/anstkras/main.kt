@@ -23,7 +23,7 @@ fun runCommand(commandLine: String) {
     val lexer = CommandParserLexer(CharStreams.fromString(commandLine))
     val parser = CommandParserParser(CommonTokenStream(lexer))
     val command = parser.line().accept(Parser())
-    command.build().execute(InputStreamReader(System.`in`), OutputStreamWriter(System.out))
+    command.build().execute()
 }
 
 class Parser : CommandParserBaseVisitor<CommandBuilder>() {
@@ -33,18 +33,18 @@ class Parser : CommandParserBaseVisitor<CommandBuilder>() {
         val pipeline = Pipeline()
         if (ctx.line().isEmpty()) {
             commandBuilder.outputStreamWriter(OutputStreamWriter(System.out))
-            pipeline.addCommandLast(commandBuilder.build())
+            pipeline.addCommandLast(commandBuilder)
             return CommandBuilder().commandStrategy(pipeline)
         }
 
-        pipeline.addCommandLast(commandBuilder.build())
+        pipeline.addCommandLast(commandBuilder)
 
         ctx.line().forEachIndexed { index, it ->
             val commandBuilder = it.command().accept(this)
             if (index == ctx.line().lastIndex) {
                 commandBuilder.outputStreamWriter(OutputStreamWriter(System.out))
             }
-            pipeline.addCommandLast(commandBuilder.build())
+            pipeline.addCommandLast(commandBuilder)
         }
 
         return CommandBuilder().commandStrategy(pipeline)

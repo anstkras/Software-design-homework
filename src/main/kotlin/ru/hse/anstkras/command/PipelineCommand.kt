@@ -4,13 +4,10 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
 class PipelineCommand(
-    val command: Command, var inputStreamReader: InputStreamReader?,
-    var outputStreamWriter: OutputStreamWriter?
+    val command: Command, var inputStreamReader: InputStreamReader,
+    var outputStreamWriter: OutputStreamWriter
 ) {
-    fun isSetInputStreamReader() = inputStreamReader != null
-    fun isSetOutputStreamWriter() = outputStreamWriter != null
-
-    fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
+    fun execute(): Int {
         return command.execute(inputStreamReader, outputStreamWriter)
     }
 }

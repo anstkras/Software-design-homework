@@ -29,7 +29,12 @@ class CommandBuilder {
 
     fun build(): PipelineCommand {
         // TODO add checks
-
-        return PipelineCommand(commandStrategy!!, inputStreamReader, outputStreamWriter)
+        if (inputStreamReader == null) {
+            inputStreamReader = InputStreamReader(System.`in`)
+        }
+        if (outputStreamWriter == null) {
+            outputStreamWriter = OutputStreamWriter(System.out)
+        }
+        return PipelineCommand(commandStrategy!!, inputStreamReader!!, outputStreamWriter!!)
     }
 }
