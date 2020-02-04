@@ -7,6 +7,7 @@ line
 command
     : echo_command
     | cat_command
+    | wcCommand
     ;
 
 echo_command
@@ -15,6 +16,10 @@ echo_command
 
 cat_command
     : 'cat' STRING
+    ;
+
+wcCommand
+    : 'wc' STRING?
     ;
 
 STRING
