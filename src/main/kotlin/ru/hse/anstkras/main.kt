@@ -27,6 +27,8 @@ fun runCommand(commandLine: String) {
     command.build().execute()
 }
 
+val environmentMap = HashMap<String, String>()
+
 class Parser : CommandParserBaseVisitor<CommandBuilder>() {
     override fun visitLine(ctx: CommandParserParser.LineContext): CommandBuilder {
 

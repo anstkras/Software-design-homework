@@ -12,6 +12,10 @@ command
     | exitCommand
     ;
 
+assignment
+    : VARIABLE'='STRING
+    ;
+
 echo_command
     : 'echo' STRING
     ;
@@ -38,5 +42,8 @@ STRING
     | '\''~[']'\''
     ;
 
+VARIABLE
+    : [a-zA-Z]+
+    ;
 
 WS : [ \t\n] -> skip;
