@@ -6,16 +6,19 @@ import ru.hse.anstkras.command.*
 import ru.hse.anstkras.commandparser.CommandParserBaseVisitor
 import ru.hse.anstkras.commandparser.CommandParserLexer
 import ru.hse.anstkras.commandparser.CommandParserParser
-import java.io.*
+import java.io.FileInputStream
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
+
 
 fun main(args: Array<String>) {
     try {
         while (true) {
-            readLine()?.let { if (it.isNotEmpty()) runCommand(it) }
+            readLine()?.let { if (it.isNotEmpty()) runCommand(Substitutor.substitute(environmentMap, it)) }
         }
     } catch (e: IllegalStateException) {
         println(e.message)
-    }  catch (e: ExitException) {
+    } catch (e: ExitException) {
 
     }
 }
@@ -32,30 +35,34 @@ val environmentMap = HashMap<String, String>()
 class Parser : CommandParserBaseVisitor<CommandBuilder>() {
     override fun visitLine(ctx: CommandParserParser.LineContext): CommandBuilder {
 
-        val commandBuilder = ctx.command().accept(this)
-        val pipeline = Pipeline()
-        if (ctx.line().isEmpty()) {
-            commandBuilder.outputStreamWriter(OutputStreamWriter(System.out))
-            pipeline.addCommandLast(commandBuilder)
-            return CommandBuilder().commandStrategy(pipeline)
-        }
-
-        pipeline.addCommandLast(commandBuilder)
-
-        var line = ctx.line(0)
-        while (true) {
-            val commandBuilder = line.command().accept(this)
-            if (line.line().isEmpty()) {
+        if (ctx.assignment() != null) {
+            return ctx.assignment().accept(this)
+        } else {
+            val commandBuilder = ctx.command().accept(this)
+            val pipeline = Pipeline()
+            if (ctx.line().isEmpty()) {
                 commandBuilder.outputStreamWriter(OutputStreamWriter(System.out))
                 pipeline.addCommandLast(commandBuilder)
-                break
-            } else {
-                pipeline.addCommandLast(commandBuilder)
+                return CommandBuilder().commandStrategy(pipeline)
             }
-            line = line.line(0)
-        }
 
-        return CommandBuilder().commandStrategy(pipeline)
+            pipeline.addCommandLast(commandBuilder)
+
+            var line = ctx.line(0)
+            while (true) {
+                val commandBuilder = line.command().accept(this)
+                if (line.line().isEmpty()) {
+                    commandBuilder.outputStreamWriter(OutputStreamWriter(System.out))
+                    pipeline.addCommandLast(commandBuilder)
+                    break
+                } else {
+                    pipeline.addCommandLast(commandBuilder)
+                }
+                line = line.line(0)
+            }
+
+            return CommandBuilder().commandStrategy(pipeline)
+        }
     }
 
     override fun visitPwdCommand(ctx: CommandParserParser.PwdCommandContext?): CommandBuilder {
@@ -82,5 +89,15 @@ class Parser : CommandParserBaseVisitor<CommandBuilder>() {
 
     override fun visitExitCommand(ctx: CommandParserParser.ExitCommandContext?): CommandBuilder {
         return CommandBuilder().commandStrategy(ExitCommand())
+    }
+
+    override fun visitAssignment(ctx: CommandParserParser.AssignmentContext): CommandBuilder {
+//       TODO check variable
+        environmentMap[ctx.variable().STRING().toString()] = ctx.value().STRING().toString()
+        return CommandBuilder().commandStrategy(Pipeline())
+    }
+
+    override fun visitUnknown(ctx: CommandParserParser.UnknownContext): CommandBuilder {
+        return CommandBuilder().commandStrategy(UnknownCommand(ctx.UNKNOWN()?.toString() ?: ctx.STRING().toString()))
     }
 }

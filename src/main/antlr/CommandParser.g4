@@ -2,6 +2,7 @@ grammar CommandParser;
 
 line
     : command ('|' line)*
+    | assignment
     ;
 
 command
@@ -10,10 +11,11 @@ command
     | wcCommand
     | pwdCommand
     | exitCommand
+    | unknown
     ;
 
 assignment
-    : VARIABLE'='STRING
+    : variable'='value
     ;
 
 echo_command
@@ -36,14 +38,27 @@ exitCommand
     : 'exit'
     ;
 
+variable
+    : STRING
+    ;
+
+value
+    : STRING
+    ;
+
+unknown
+    : STRING
+    | UNKNOWN
+    ;
+
 STRING
-    : (~[ \t\n\r])+
+    : (~[ \t\n\r=])+
     | '"'~["]*'"'
     | '\''~[']'\''
     ;
 
-VARIABLE
-    : [a-zA-Z]+
+UNKNOWN
+    : [a-zA-Z0-9_]+? ~[|]*?
     ;
 
 WS : [ \t\n] -> skip;

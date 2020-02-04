@@ -8,7 +8,7 @@ import java.util.*
 
 //comment that here could be pipeline or command
 class Pipeline : Command {
-    private val commands: Deque<CommandBuilder> = LinkedList()
+    private val commands: Deque<CommandBuilder> = LinkedList<CommandBuilder>()
     // TODO check called once
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
         if (commands.isEmpty()) {
