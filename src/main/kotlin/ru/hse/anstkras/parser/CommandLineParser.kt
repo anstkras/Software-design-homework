@@ -7,6 +7,7 @@ import ru.hse.anstkras.environment.Environment
 import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import kotlin.text.Charsets.UTF_8
 
 class CommandLineParser(private val environment: Environment) : CommandParserBaseVisitor<CommandBuilder>() {
     override fun visitLine(ctx: CommandParserParser.LineContext): CommandBuilder {
@@ -47,7 +48,7 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
     }
 
     override fun visitEchoCommand(ctx: CommandParserParser.EchoCommandContext): CommandBuilder {
-        val args = ctx.strings.joinToString(separator = " ") { it.text }
+        val args = ctx.strings.joinToString(separator = " ") { it.text.trim('"', '\'') }
         return CommandBuilder()
             .commandStrategy(EchoCommand())
             .inputStreamReader(InputStreamReader(args.byteInputStream()))
@@ -56,7 +57,7 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
     override fun visitCatCommand(ctx: CommandParserParser.CatCommandContext): CommandBuilder {
         return CommandBuilder()
             .commandStrategy(CatCommand())
-            .inputStreamReader(InputStreamReader(FileInputStream(ctx.STRING().toString())))
+            .inputStreamReader(InputStreamReader(FileInputStream(ctx.getFileName()), UTF_8))
     }
 
     override fun visitWcCommand(ctx: CommandParserParser.WcCommandContext): CommandBuilder {
@@ -66,7 +67,7 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
         }
         return CommandBuilder()
             .commandStrategy(WcCommand())
-            .inputStreamReader(InputStreamReader(FileInputStream(ctx.STRING().toString())))
+            .inputStreamReader(InputStreamReader(FileInputStream(ctx.getFileName()), UTF_8))
     }
 
     override fun visitExitCommand(ctx: CommandParserParser.ExitCommandContext?): CommandBuilder {
@@ -75,8 +76,7 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
     }
 
     override fun visitAssignment(ctx: CommandParserParser.AssignmentContext): CommandBuilder {
-//       TODO check variable
-        environment.setValue(ctx.variable().STRING().toString(), ctx.value().STRING().toString())
+        environment.setValue(ctx.getVariable(), ctx.getValue())
         return CommandBuilder()
             .commandStrategy(Pipeline())
     }
@@ -88,4 +88,21 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
             )
         )
     }
+}
+
+private fun CommandParserParser.AssignmentContext.getVariable(): String {
+    //       TODO check variable
+    return this.variable().STRING().toString()
+}
+
+private fun CommandParserParser.AssignmentContext.getValue(): String {
+    return this.value().STRING().toString().trim('"', '\'')
+}
+
+private fun CommandParserParser.CatCommandContext.getFileName(): String {
+    return this.STRING().toString().trim('"', '\'')
+}
+
+private fun CommandParserParser.WcCommandContext.getFileName(): String {
+    return this.STRING().toString().trim('"', '\'')
 }
