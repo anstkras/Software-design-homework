@@ -19,4 +19,15 @@ internal class EchoCommandTest {
         )
         assertEquals(text + System.lineSeparator(), byteArrayOutputStream.toString(UTF_8))
     }
+
+    fun testEchoCat() {
+        val echoCommand = EchoCommand()
+        val text = "cat"
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        echoCommand.execute(
+            InputStreamReader(text.byteInputStream(UTF_8)),
+            OutputStreamWriter(byteArrayOutputStream, UTF_8)
+        )
+        assertEquals("cat" + System.lineSeparator(), byteArrayOutputStream.toString(UTF_8))
+    }
 }

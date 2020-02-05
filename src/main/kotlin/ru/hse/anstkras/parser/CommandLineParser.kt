@@ -47,9 +47,10 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
     }
 
     override fun visitEchoCommand(ctx: CommandParserParser.EchoCommandContext): CommandBuilder {
+        val args = ctx.strings.joinToString(separator = " ") { it.text }
         return CommandBuilder()
             .commandStrategy(EchoCommand())
-            .inputStreamReader(InputStreamReader(ctx.STRING().toString().byteInputStream()))
+            .inputStreamReader(InputStreamReader(args.byteInputStream()))
     }
 
     override fun visitCatCommand(ctx: CommandParserParser.CatCommandContext): CommandBuilder {

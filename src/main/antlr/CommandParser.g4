@@ -19,23 +19,23 @@ assignment
     ;
 
 echoCommand
-    : 'echo' STRING
+    : ECHO strings+=STRING+
     ;
 
 catCommand
-    : 'cat' STRING
+    : CAT STRING
     ;
 
 wcCommand
-    : 'wc' STRING?
+    : WC STRING?
     ;
 
 pwdCommand
-    : 'pwd'
+    : PWD
     ;
 
 exitCommand
-    : 'exit'
+    : EXIT
     ;
 
 variable
@@ -55,6 +55,26 @@ STRING
     : (~[ \t\n\r=])+
     | '"'~["]*'"'
     | '\''~[']'\''
+    ;
+
+CAT
+    : 'cat '
+    ;
+
+ECHO
+    : 'echo '
+    ;
+
+WC
+    : 'wc '
+    ;
+
+PWD
+    : 'pwd '
+    ;
+
+EXIT
+    : 'exit'
     ;
 
 UNKNOWN
