@@ -9,6 +9,7 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import kotlin.text.Charsets.UTF_8
 
+/** CommandLineParser is responsible for constructing commands from parse tree */
 class CommandLineParser(private val environment: Environment) : CommandParserBaseVisitor<CommandBuilder>() {
     override fun visitLine(ctx: CommandParserParser.LineContext): CommandBuilder {
 
@@ -112,6 +113,6 @@ private fun CommandParserParser.WcCommandContext.getFileName(): String {
     return this.STRING().toString().trim('"', '\'')
 }
 
-private fun getInputStreamReader(fileName : String) : InputStreamReader {
+private fun getInputStreamReader(fileName: String): InputStreamReader {
     return InputStreamReader(FileInputStream(fileName), UTF_8)
 }

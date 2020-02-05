@@ -11,9 +11,11 @@ import ru.hse.anstkras.parser.CommandLineParser
 import ru.hse.anstkras.substitution.Substitutor
 import java.io.IOException
 
+/** CommandLineInterpreter is responsible for interaction with user */
 class CommandLineInterpreter {
     private val environment = Environment()
 
+    /** Starts commandLineInterpreter */
     fun run() {
         try {
             while (true) {

@@ -3,6 +3,7 @@ package ru.hse.anstkras.command
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
+/** WcCommand implements standard linux wc command */
 class WcCommand : Command {
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
         var bytesNumber = 0

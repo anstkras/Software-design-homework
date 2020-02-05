@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test
 import ru.hse.anstkras.commandparser.CommandParserLexer
 import ru.hse.anstkras.commandparser.CommandParserParser
 import ru.hse.anstkras.environment.Environment
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
+import java.io.*
 
 internal class CommandLineParserTest {
     @Test
@@ -18,7 +17,11 @@ internal class CommandLineParserTest {
 
     @Test
     fun runPipeLine() {
-        checkOutput("cat 123.txt | wc | wc", "1 3 5" + System.lineSeparator())
+        val file = File("testCat.txt")
+        val text = "text123 !@#$%^&*()_=${System.lineSeparator()}line2"
+        file.writeText(text)
+        checkOutput("cat testCat.txt | wc | wc", "1 3 6" + System.lineSeparator())
+        file.delete()
     }
 
     private fun runCommand(commandLine: String) {

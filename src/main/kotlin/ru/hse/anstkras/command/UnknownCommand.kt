@@ -4,6 +4,10 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
+/**
+ * UnknownCommand is a command that the CLI does not know. In this case
+ * ProcessBuilder is used
+ */
 class UnknownCommand(private val command: String) : Command {
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
         val processBuilder = ProcessBuilder()

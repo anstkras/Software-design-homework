@@ -4,6 +4,7 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.nio.file.Paths
 
+/** PwdCommand implements standard linux pwd command */
 class PwdCommand : Command {
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
         val currentPath = Paths.get("")
