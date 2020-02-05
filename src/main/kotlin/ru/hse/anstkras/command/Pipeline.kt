@@ -4,13 +4,17 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.lang.IllegalStateException
 import java.util.*
 
-//comment that here could be pipeline or command
 class Pipeline : Command {
     private val commands: Deque<CommandBuilder> = LinkedList<CommandBuilder>()
-    // TODO check called once
+    private var called = false
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
+        if (called) {
+            throw IllegalStateException("Pipeline called twice")
+        }
+        called = true
         if (commands.isEmpty()) {
             return 0;
         }

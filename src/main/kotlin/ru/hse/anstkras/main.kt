@@ -9,7 +9,6 @@ import ru.hse.anstkras.commandparser.CommandParserLexer
 import ru.hse.anstkras.commandparser.CommandParserParser
 import ru.hse.anstkras.environment.Environment
 
-
 fun main(args: Array<String>) {
     val environment = Environment()
     try {

@@ -28,7 +28,9 @@ class CommandBuilder {
     fun isSetOutputStreamWriter() = outputStreamWriter != null
 
     fun build(): PipelineCommand {
-        // TODO add checks
+        if (commandStrategy == null) {
+            throw IllegalStateException("Сommand strategy must be set")
+        }
         if (inputStreamReader == null) {
             inputStreamReader = InputStreamReader(System.`in`)
         }

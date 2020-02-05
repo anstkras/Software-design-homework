@@ -13,7 +13,7 @@ class WcCommand : Command {
             bytesNumber += it.toByteArray().size
             wordsNumber += it.split(" ").size
         }
-        outputStreamWriter.write("$linesNumber $wordsNumber $bytesNumber ${System.lineSeparator()}")
+        outputStreamWriter.write("$linesNumber $wordsNumber $bytesNumber${System.lineSeparator()}")
         outputStreamWriter.flush()
         return 0
     }

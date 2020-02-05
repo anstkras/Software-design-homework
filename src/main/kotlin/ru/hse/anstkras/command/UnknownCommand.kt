@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter
 class UnknownCommand(private val command : String) : Command {
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
         val processBuilder = ProcessBuilder()
-        processBuilder.command(command)
+        processBuilder.command(command.split(" "))
 
         try {
             val process = processBuilder.start()
