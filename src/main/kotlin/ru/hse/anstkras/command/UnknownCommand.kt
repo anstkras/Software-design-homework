@@ -1,29 +1,22 @@
 package ru.hse.anstkras.command
 
 import java.io.BufferedReader
-import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 
-class UnknownCommand(private val command : String) : Command {
+class UnknownCommand(private val command: String) : Command {
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {
         val processBuilder = ProcessBuilder()
         processBuilder.command(command.split(" "))
-
-        try {
-            val process = processBuilder.start()
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
-            var line: String?
-            while (reader.readLine().also { line = it } != null) {
-                outputStreamWriter.write(line + System.lineSeparator())
-            }
-            val exitCode = process.waitFor()
-            //println("\nExited with error code : $exitCode")
-        } catch (e: IOException) {
-            //e.printStackTrace()
-        } catch (e: InterruptedException) {
-            //e.printStackTrace()
+        val process = processBuilder.start()
+        val reader = BufferedReader(InputStreamReader(process.inputStream))
+        var line = reader.readLine()
+        while (line != null) {
+            outputStreamWriter.write(line + System.lineSeparator())
+            line = reader.readLine()
         }
-        return 0
+        outputStreamWriter.flush()
+        val exitCode = process.waitFor()
+        return exitCode
     }
 }

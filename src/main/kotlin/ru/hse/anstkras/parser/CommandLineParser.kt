@@ -57,7 +57,8 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
     override fun visitCatCommand(ctx: CommandParserParser.CatCommandContext): CommandBuilder {
         return CommandBuilder()
             .commandStrategy(CatCommand())
-            .inputStreamReader(InputStreamReader(FileInputStream(ctx.getFileName()), UTF_8))
+            .inputStreamReader(getInputStreamReader(ctx.getFileName()))
+            .shouldCloseInputStream()
     }
 
     override fun visitWcCommand(ctx: CommandParserParser.WcCommandContext): CommandBuilder {
@@ -67,7 +68,8 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
         }
         return CommandBuilder()
             .commandStrategy(WcCommand())
-            .inputStreamReader(InputStreamReader(FileInputStream(ctx.getFileName()), UTF_8))
+            .inputStreamReader(getInputStreamReader(ctx.getFileName()))
+            .shouldCloseInputStream()
     }
 
     override fun visitExitCommand(ctx: CommandParserParser.ExitCommandContext?): CommandBuilder {
@@ -91,8 +93,11 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
 }
 
 private fun CommandParserParser.AssignmentContext.getVariable(): String {
-    //       TODO check variable
-    return this.variable().STRING().toString()
+    val variable = variable().STRING().toString()
+    if (!variable.matches(Regex("[a-zA-Z0-9_]+"))) {
+        throw VariableFormatException()
+    }
+    return variable
 }
 
 private fun CommandParserParser.AssignmentContext.getValue(): String {
@@ -105,4 +110,8 @@ private fun CommandParserParser.CatCommandContext.getFileName(): String {
 
 private fun CommandParserParser.WcCommandContext.getFileName(): String {
     return this.STRING().toString().trim('"', '\'')
+}
+
+private fun getInputStreamReader(fileName : String) : InputStreamReader {
+    return InputStreamReader(FileInputStream(fileName), UTF_8)
 }

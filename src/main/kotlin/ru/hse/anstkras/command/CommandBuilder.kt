@@ -11,6 +11,12 @@ class CommandBuilder {
     var outputStreamWriter: OutputStreamWriter? = null
         private set
 
+    var shouldCloseInputStream: Boolean = false
+        private set
+
+    var shouldCloseOutputStream: Boolean = false
+        private set
+
     fun commandStrategy(commandStrategy: Command) = apply {
         this.commandStrategy = commandStrategy
     }
@@ -21,6 +27,14 @@ class CommandBuilder {
 
     fun outputStreamWriter(outputStreamWriter: OutputStreamWriter) = apply {
         this.outputStreamWriter = outputStreamWriter
+    }
+
+    fun shouldCloseInputStream(shouldCloseInputStream: Boolean = true) = apply {
+        this.shouldCloseInputStream = shouldCloseInputStream
+    }
+
+    fun shouldCloseOutputStream(shouldCloseOutputStream: Boolean = true) = apply {
+        this.shouldCloseOutputStream = shouldCloseOutputStream
     }
 
     fun isSetCommandStrategy() = commandStrategy != null
@@ -37,6 +51,12 @@ class CommandBuilder {
         if (outputStreamWriter == null) {
             outputStreamWriter = OutputStreamWriter(System.out)
         }
-        return PipelineCommand(commandStrategy!!, inputStreamReader!!, outputStreamWriter!!)
+        return PipelineCommand(
+            commandStrategy!!,
+            inputStreamReader!!,
+            outputStreamWriter!!,
+            shouldCloseInputStream,
+            shouldCloseOutputStream
+        )
     }
 }

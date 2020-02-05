@@ -51,12 +51,6 @@ unknown
     | UNKNOWN
     ;
 
-STRING
-    : (~[ \t\n\r=])+
-    | '"'~["]*'"'
-    | '\''~[']'\''
-    ;
-
 CAT
     : 'cat '
     ;
@@ -67,15 +61,23 @@ ECHO
 
 WC
     : 'wc '
+    | ' wc'
     ;
 
 PWD
-    : 'pwd '
+    : 'pwd'
     ;
 
 EXIT
     : 'exit'
     ;
+
+STRING
+    : (~[ \t\n\r=])+
+    | '"'~["]*'"'
+    | '\''~[']'\''
+    ;
+
 
 UNKNOWN
     : [a-zA-Z0-9_]+? ~[|]*?

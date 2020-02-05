@@ -22,6 +22,7 @@ class Pipeline : Command {
             commands.first.inputStreamReader(InputStreamReader(System.`in`))
         }
         var byteArrayOutputStream = ByteArrayOutputStream()
+        var returnCode = 0
         commands.forEachIndexed { index, it ->
             if (!it.isSetInputStreamReader()) {
                 it.inputStreamReader(InputStreamReader(ByteArrayInputStream(byteArrayOutputStream.toByteArray())))
@@ -30,9 +31,9 @@ class Pipeline : Command {
             if (index != commands.size - 1) {
                 it.outputStreamWriter(OutputStreamWriter(byteArrayOutputStream))
             }
-            it.build().execute()
+            returnCode = it.build().execute()
         }
-        return 0
+        return returnCode
     }
 
     fun addCommandFirst(commandBuilder: CommandBuilder) {

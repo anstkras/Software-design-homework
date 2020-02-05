@@ -16,6 +16,7 @@ internal class PipelineCommandTest {
             echoCommand,
             InputStreamReader(text.byteInputStream(Charsets.UTF_8)),
             OutputStreamWriter(byteArrayOutputStream, Charsets.UTF_8)
+            , false, false
         )
         pipelineCommand.execute()
         assertEquals(text + System.lineSeparator(), byteArrayOutputStream.toString(Charsets.UTF_8))
