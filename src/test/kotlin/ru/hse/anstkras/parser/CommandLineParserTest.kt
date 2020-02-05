@@ -18,7 +18,7 @@ internal class CommandLineParserTest {
 
     @Test
     fun runPipeLine() {
-        checkOutput("cat 123.txt | wc | echo 321", "321" + System.lineSeparator())
+        checkOutput("cat 123.txt | wc | wc", "1 3 5" + System.lineSeparator())
     }
 
     private fun runCommand(commandLine: String) {

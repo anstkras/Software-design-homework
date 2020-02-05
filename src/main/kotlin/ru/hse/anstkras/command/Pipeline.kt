@@ -4,9 +4,12 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
-import java.lang.IllegalStateException
 import java.util.*
 
+/**
+ *  Pipeline represents several commands piped together. Commands are executed
+ *  consequentially
+ */
 class Pipeline : Command {
     private val commands: Deque<CommandBuilder> = LinkedList<CommandBuilder>()
     private var called = false
@@ -16,7 +19,7 @@ class Pipeline : Command {
         }
         called = true
         if (commands.isEmpty()) {
-            return 0;
+            return 0
         }
         if (!commands.first.isSetInputStreamReader()) {
             commands.first.inputStreamReader(InputStreamReader(System.`in`))
@@ -36,10 +39,12 @@ class Pipeline : Command {
         return returnCode
     }
 
+    /** Adds a command to the beginning of the commands list */
     fun addCommandFirst(commandBuilder: CommandBuilder) {
         commands.addFirst(commandBuilder)
     }
 
+    /** Adds a command to the end of the commands list */
     fun addCommandLast(commandBuilder: CommandBuilder) {
         commands.addLast(commandBuilder)
     }
