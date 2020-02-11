@@ -1,13 +1,11 @@
 package ru.hse.anstkras.parser
 
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import ru.hse.anstkras.commandparser.CommandParserLexer
-import ru.hse.anstkras.commandparser.CommandParserParser
-import ru.hse.anstkras.environment.Environment
-import java.io.*
+import ru.hse.anstkras.commandlineinterpretator.CommandLineInterpreter
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.PrintStream
 
 internal class CommandLineParserTest {
     @Test
@@ -24,17 +22,16 @@ internal class CommandLineParserTest {
         file.delete()
     }
 
-    private fun runCommand(commandLine: String) {
-        val lexer = CommandParserLexer(CharStreams.fromString(commandLine))
-        val parser = CommandParserParser(CommonTokenStream(lexer))
-        val command = parser.line().accept(CommandLineParser(Environment()))
-        command.build().execute()
+    @Test
+    fun echoPipeGrep() {
+        checkOutput("echo 123 | grep 123", "123${System.lineSeparator()}")
     }
 
     private fun checkOutput(command: String, expected: String) {
         val out = ByteArrayOutputStream()
         System.setOut(PrintStream(out))
-        runCommand(command)
+        val commandLineInterpreter = CommandLineInterpreter()
+        commandLineInterpreter.runCommand(command)
         assertEquals(expected, out.toString())
     }
 }

@@ -4,14 +4,19 @@ import ru.hse.anstkras.grep.Grep
 import ru.hse.anstkras.grep.GrepLineSplitter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
+import java.lang.Exception
+import java.lang.IllegalStateException
 
 class GrepCommand(arguments: String) : Command {
     private val grep = Grep()
 
     init {
-        val splittedArguments = GrepLineSplitter.getArgumentsList(arguments)
-        // TODO
-        grep.parse(splittedArguments)
+        try {
+            val splittedArguments = GrepLineSplitter.getArgumentsList(arguments)
+            grep.parse(splittedArguments)
+        } catch (e: Exception) {
+            throw IllegalStateException("Wrong parameters")
+        }
     }
 
     override fun execute(inputStreamReader: InputStreamReader, outputStreamWriter: OutputStreamWriter): Int {

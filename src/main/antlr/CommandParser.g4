@@ -11,7 +11,7 @@ command
     | wcCommand
     | pwdCommand
     | exitCommand
-    | grep
+    | grepCommand
     | unknown
     ;
 
@@ -47,7 +47,7 @@ value
     : STRING
     ;
 
-grep
+grepCommand
     : GREP
     ;
 

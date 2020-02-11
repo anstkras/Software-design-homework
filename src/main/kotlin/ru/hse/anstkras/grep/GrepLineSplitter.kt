@@ -2,7 +2,6 @@ package ru.hse.anstkras.grep
 
 class GrepLineSplitter {
     companion object {
-        // TODO do smth with it
         fun getArgumentsList(arguments: String): ArrayList<String> {
             val argumentsList = ArrayList<String>()
             var currentArgument = ""
@@ -15,6 +14,8 @@ class GrepLineSplitter {
                     } else
                         if (!isInsideDoubleQuotes) {
                             isInsideSingleQuotes = true
+                        } else {
+                            currentArgument += c
                         }
                 } else
                     if (c == '"') {
@@ -23,7 +24,10 @@ class GrepLineSplitter {
                         } else
                             if (!isInsideSingleQuotes) {
                                 isInsideDoubleQuotes = true
+                            } else {
+                                currentArgument += c
                             }
+
                     } else
                         if (c.isWhitespace() && !isInsideSingleQuotes && !isInsideDoubleQuotes) {
                             if (currentArgument.isNotEmpty()) {
