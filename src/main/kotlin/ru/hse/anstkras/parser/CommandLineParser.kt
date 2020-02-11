@@ -94,8 +94,12 @@ class CommandLineParser(private val environment: Environment) : CommandParserBas
 
     override fun visitGrep(ctx: CommandParserParser.GrepContext): CommandBuilder {
         val grepLine = ctx.GREP().toString()
-        return CommandBuilder().commandStrategy(GrepCommand())
-                .inputStreamReader(getInputStreamReaderFromString(grepLine))
+        val grepCommand = GrepCommand(grepLine)
+        val commandBuilder = CommandBuilder().commandStrategy(grepCommand)
+        if (grepCommand.hasFileName()) {
+            commandBuilder.inputStreamReader(getInputStreamReaderFromFile(grepCommand.getFileName()))
+        }
+        return commandBuilder
     }
 }
 
