@@ -21,6 +21,10 @@ generateGrammarSource {
     outputDirectory = new File("$buildDir/generated-src/antlr/main/ru/hse/anstkras/commandparser")
 }
 
+run{
+    standardInput = System.in
+}
+
 compileJava.dependsOn generateGrammarSource
 compileKotlin.dependsOn generateGrammarSource
 
