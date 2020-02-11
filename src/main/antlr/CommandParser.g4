@@ -11,6 +11,7 @@ command
     | wcCommand
     | pwdCommand
     | exitCommand
+    | grep
     | unknown
     ;
 
@@ -46,9 +47,17 @@ value
     : STRING
     ;
 
+grep
+    : GREP
+    ;
+
 unknown
     : STRING
     | UNKNOWN
+    ;
+
+GREP
+    : 'grep'~[|]*
     ;
 
 CAT
