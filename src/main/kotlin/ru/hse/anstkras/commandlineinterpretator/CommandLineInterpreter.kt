@@ -17,26 +17,25 @@ class CommandLineInterpreter {
 
     /** Starts commandLineInterpreter */
     fun run() {
-        try {
-            while (true) {
+        while (true) {
+            try {
                 readLine()?.let {
                     if (it.isNotEmpty()) runCommand(
-                        Substitutor.substitute(environment, it),
-                        environment
-                    )
+                            Substitutor.substitute(environment, it))
                 }
+            } catch (e: IllegalStateException) {
+                environment.setValue("?", "1")
+            } catch (e: VariableFormatException) {
+                environment.setValue("?", "127")
+            } catch (e: IOException) {
+                environment.setValue("?", "1")
+            } catch (e: ExitException) {
+                break
             }
-        } catch (e: IllegalStateException) {
-            environment.setValue("?", "1")
-        } catch (e: VariableFormatException) {
-            environment.setValue("?", "127")
-        } catch (e: IOException) {
-            environment.setValue("?", "1")
-        } catch (e: ExitException) {
         }
     }
 
-    private fun runCommand(commandLine: String, environment: Environment) {
+    fun runCommand(commandLine: String) {
         val lexer = CommandParserLexer(CharStreams.fromString(commandLine))
         val parser = CommandParserParser(CommonTokenStream(lexer))
         val command = parser.line().accept(CommandLineParser(environment))
