@@ -4,9 +4,15 @@ import ru.hse.anstkras.grep.Grep
 import ru.hse.anstkras.grep.GrepLineSplitter
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
-import java.lang.Exception
-import java.lang.IllegalStateException
 
+/** GrepCommand implements standard linux grep command.
+ * Arguments should be in a form of "\[OPTIONS\] REGEX FILENAME?"
+ * where options are:
+ * -i -- makes search case-insensitive
+ * -w -- matches only whole words
+ * -A n -- print n lines of trailing context
+ * REGEX should be a standard Java regex
+ */
 class GrepCommand(arguments: String) : Command {
     private val grep = Grep()
 
@@ -36,10 +42,16 @@ class GrepCommand(arguments: String) : Command {
         return 0
     }
 
+    /** Checks if this grep has a file as an input */
     fun hasFileName(): Boolean {
         return grep.hasFileName()
     }
 
+    /** Gets fileName of an input file
+     *
+     * @throws IllegalStateException if this grep command does not have
+     * a file as an input
+     */
     fun getFileName(): String {
         return grep.getFileName()
     }

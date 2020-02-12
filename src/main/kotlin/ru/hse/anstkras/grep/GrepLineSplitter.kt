@@ -1,7 +1,13 @@
 package ru.hse.anstkras.grep
 
+/** GrepLineSplitter is responsible for splitting grep line in
+ * an array of arguments
+ */
 class GrepLineSplitter {
     companion object {
+        /** Splits the arguments string in an array of arguments.
+         * In case of grep is the first word it is removed
+         */
         fun getArgumentsList(arguments: String): ArrayList<String> {
             val argumentsList = ArrayList<String>()
             var currentArgument = ""
